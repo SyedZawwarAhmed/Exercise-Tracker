@@ -31,18 +31,25 @@ userRouter
 userRouter.route("/:_id/exercises").post(async (req, res, next) => {
   try {
     const { description, duration, date } = req.body;
+    const dateString = new Date(date)
     const id = req.params._id;
     const user = await User.findById(id);
     const newExercise = new Exercise({
       username: user.username,
       description,
       duration,
-      date,
+      date: dateString.toDateString(),
       userId: id,
     });
-    const response = await newExercise.save();
+    await newExercise.save();
     res.statusCode = 200;
-    res.send(response);
+    res.send({
+      _id: id,
+      username: newExercise.username,
+      description: newExercise.description,
+      duration: newExercise.duration,
+      date: newExercise.date,
+    });
   } catch (err) {
     next(err);
   }
@@ -50,8 +57,23 @@ userRouter.route("/:_id/exercises").post(async (req, res, next) => {
 
 userRouter.route("/:_id/logs").get(async (req, res, next) => {
   try {
-    const logs = await User.find({ _id: req.params._id });
+    const logs = await Exercise.find({ userId: req.params._id });
+    const username = logs[0].username;
     const count = logs.length;
-    const response = { username };
-  } catch (err) {}
+    const _id = req.params._id;
+    const response = {
+      username,
+      count,
+      _id,
+      logs: logs.map((log) => ({
+        description: log.description,
+        duration: log.duration,
+        date: log.date,
+      })),
+    };
+    res.statusCode = 200
+    res.send(response)
+  } catch (err) {
+    next(err);
+  }
 });
