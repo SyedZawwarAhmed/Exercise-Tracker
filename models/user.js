@@ -5,9 +5,6 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  desription: String,
-  duration: Number,
-  date: String,
 });
 
 export const User = model("User", userSchema);
