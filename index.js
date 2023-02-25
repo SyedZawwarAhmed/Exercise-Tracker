@@ -31,7 +31,7 @@ app.use("/api/users", userRouter);
 // Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send("Something went wrong.");
+  res.status(500).send(err);
 });
 
 const listener = app.listen(process.env.PORT || 5000, () => {
