@@ -31,7 +31,7 @@ userRouter
 userRouter.route("/:_id/exercises").post(async (req, res, next) => {
   try {
     const { description, duration, date } = req.body;
-    const dateString = new Date(date)
+    const dateString = date ? new Date(date) : new Date();
     const id = req.params._id;
     const user = await User.findById(id);
     const newExercise = new Exercise({
@@ -71,8 +71,8 @@ userRouter.route("/:_id/logs").get(async (req, res, next) => {
         date: log.date,
       })),
     };
-    res.statusCode = 200
-    res.send(response)
+    res.statusCode = 200;
+    res.send(response);
   } catch (err) {
     next(err);
   }
