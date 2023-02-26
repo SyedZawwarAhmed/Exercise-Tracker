@@ -65,7 +65,7 @@ userRouter.route("/:_id/logs/:from?/:to?/:limit?").get(async (req, res, next) =>
         const to = new Date(req.params.to)
         return log.date >= from && log.date <= to
       } else if (req.params.limit) {
-        return index < limit
+        return index < req.params.limit
       } else {
         return true
       }
@@ -77,10 +77,10 @@ userRouter.route("/:_id/logs/:from?/:to?/:limit?").get(async (req, res, next) =>
       username,
       count,
       _id,
-      log: filteredLogs.map((log) => ({
-        description: log.description,
-        duration: log.duration,
-        date: log.date.toDateString(),
+      log: filteredLogs.map((item) => ({
+        description: item.description,
+        duration: item.duration,
+        date: item.date.toDateString(),
       })),
     };
     res.statusCode = 200;
