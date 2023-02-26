@@ -65,7 +65,7 @@ userRouter.route("/:_id/logs").get(async (req, res, next) => {
       username,
       count,
       _id,
-      logs: logs.map((log) => ({
+      log: logs.map((log) => ({
         description: log.description,
         duration: log.duration,
         date: log.date,
